@@ -1,0 +1,28 @@
+name: Quick Ci
+run-name: "${{ github.actor }}: ${{ github.event.head_commit.message }}"
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install tools via mise
+        uses: jdx/mise-action@v2
+        with:
+          cache: true
+
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm playwright install --with-deps
+          pnpm vite build
+
+      - name: Run acceptance tests
+        run: pnpm playwright test
