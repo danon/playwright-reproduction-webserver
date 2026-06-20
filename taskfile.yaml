@@ -1,0 +1,8 @@
+version: 3
+output: prefixed
+
+tasks:
+  client:start:
+    - pnpm vite build
+    - pnpm vite preview --port 4100
+  server:start: go run .
